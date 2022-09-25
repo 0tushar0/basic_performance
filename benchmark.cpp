@@ -32,7 +32,7 @@ struct People {
 struct PeopleArr {
 	std::array<float, iter> weights = {40,50,60,70};
 	std::array<int, iter> heights = {140,150,160,170};
-};
+} p_arr_struct;
 
 static void BM_Access_Arr(benchmark::State& state) {
 	for(auto _ : state) {
@@ -46,7 +46,6 @@ static void BM_Access_Arr(benchmark::State& state) {
 BENCHMARK(BM_Access_Arr);
 
 static void BM_Access_Vec(benchmark::State& state) {
-	std::string x = "hello";
 	for(auto _ : state) {
 		for(int i = 0; i < 4; i++) {
 			p_vec.weights[i];
@@ -57,12 +56,24 @@ static void BM_Access_Vec(benchmark::State& state) {
 
 BENCHMARK(BM_Access_Vec);
 
+static void BM_Access_Arr_Struct(benchmark::State& state) {
+	for(auto _ : state) {
+		for(int i = 0; i < 4; i++) {
+			p_arr_struct.weights[i];
+			p_arr_struct.heights[i];
+		}
+	}
+}
+
+BENCHMARK(BM_Access_Arr_Struct);
+
 BENCHMARK_MAIN();
 
 /*
---------------------------------------------------------
-Benchmark              Time             CPU   Iterations
---------------------------------------------------------
-BM_Access_Arr       2.55 ns         2.55 ns    262341968
-BM_Access_Vec       10.8 ns         10.8 ns     64599849
+---------------------------------------------------------------
+Benchmark                     Time             CPU   Iterations
+---------------------------------------------------------------
+BM_Access_Arr              2.52 ns         2.52 ns    278007511
+BM_Access_Vec              9.22 ns         9.22 ns     75243907
+BM_Access_Arr_Struct       15.7 ns         15.7 ns     44572819
 */
