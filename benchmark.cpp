@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <array>
+#include <thread>
 
 #include <benchmark/benchmark.h>
 
@@ -99,6 +100,29 @@ static void BM_Access_Arr_C_Struct(benchmark::State& state) {
 
 BENCHMARK(BM_Access_Arr_C_Struct);
 
+void weight_iter() {
+	for(auto i : p_c_arr.weights) {
+		i;
+	}
+}
+
+void height_iter() {
+	for(auto i : p_c_arr.heights) {
+		i;
+	}
+}
+
+static void BM_Access_For_Each(benchmark::State& state) {
+	for(auto _ : state) {
+		std::thread w_iter_thread(weight_iter);
+		std::thread h_iter_thread(height_iter);
+		w_iter_thread.join();
+		h_iter_thread.join();
+	}
+}
+
+BENCHMARK(BM_Access_For_Each);
+
 BENCHMARK_MAIN();
 
 /*
@@ -116,5 +140,6 @@ BM_Access_Arr                4.02 ns         4.02 ns    174494693
 BM_Access_Vec                9.78 ns         9.78 ns     68895976
 BM_Access_Arr_Struct         17.1 ns         17.1 ns     41317196
 BM_Access_Arr_C_Struct       3.57 ns         3.57 ns    195973965
+BM_Access_For_Each          20064 ns        15598 ns        43810
 
 */
