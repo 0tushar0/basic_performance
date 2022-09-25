@@ -1,6 +1,11 @@
 // g++ benchmark.cpp -std=c++11 -isystem benchmark/include -Lbenchmark/build/src -lbenchmark -lpthread -o mybenchmark
 
+#include <vector>
+#include <array>
+
 #include <benchmark/benchmark.h>
+
+const int iter = 4;
 
 struct Person {
 	float weight = 60; // kg
@@ -13,17 +18,21 @@ struct Person {
 	{}
 };
 
-Person p_arr[4] = {{40,140},
+Person p_arr[iter] = {{40,140},
 		{50,150},
 		{60,160},
 		{70,170}};
 
 struct People {
 	std::vector<float> weights = {40,50,60,70};
-	std::vector<float> heights = {140,150,160,170};
+	std::vector<int> heights = {140,150,160,170};
 } p_vec;
 
 
+struct PeopleArr {
+	std::array<float, iter> weights = {40,50,60,70};
+	std::array<int, iter> heights = {140,150,160,170};
+};
 
 static void BM_Access_Arr(benchmark::State& state) {
 	for(auto _ : state) {
@@ -56,4 +65,4 @@ Benchmark              Time             CPU   Iterations
 --------------------------------------------------------
 BM_Access_Arr       2.55 ns         2.55 ns    262341968
 BM_Access_Vec       10.8 ns         10.8 ns     64599849
-*
+*/
